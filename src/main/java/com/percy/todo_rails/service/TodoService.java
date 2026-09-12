@@ -3,6 +3,7 @@ package com.percy.todo_rails.service;
 import com.percy.todo_rails.model.Todo;
 import com.percy.todo_rails.repository.TodoRepository;
 import org.springframework.stereotype.Service;
+import com.percy.todo_rails.exception.TodoNotFoundException;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class TodoService {
 
     public Todo getTodoById(Long id) {
         return todoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Todo not found"));
+                .orElseThrow(() -> new TodoNotFoundException("Todo not found with id: " + id));
     }
 
     public Todo createTodo(Todo todo) {
