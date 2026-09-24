@@ -4,6 +4,8 @@ import com.percy.todo_rails.model.Todo;
 import com.percy.todo_rails.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import com.percy.todo_rails.exception.TodoNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -23,6 +25,10 @@ public class TodoService {
     public Todo getTodoById(Long id) {
         return todoRepository.findById(id)
                 .orElseThrow(() -> new TodoNotFoundException("Todo not found with id: " + id));
+    }
+
+    public Page<Todo> getTodosPaginated(Pageable pageable) {
+        return todoRepository.findAll(pageable);
     }
 
     public Todo createTodo(Todo todo) {

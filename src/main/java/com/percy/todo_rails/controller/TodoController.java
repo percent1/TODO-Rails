@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -42,6 +44,11 @@ public class TodoController {
     @GetMapping("/sort/desc")
     public List<Todo> getTodosSortedDescending() {
         return todoService.getTodosSortedDescending();
+    }
+
+    @GetMapping("/page")
+    public Page<Todo> getTodosPaginated(Pageable pageable) {
+        return todoService.getTodosPaginated(pageable);
     }
 
     @GetMapping("/{id}")

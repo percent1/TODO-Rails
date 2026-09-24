@@ -185,4 +185,21 @@ void shouldSortTodosByTitleDescending() throws Exception {
             .andExpect(jsonPath("$[1].title").value("Apple"));
 }
 
+@Test
+void shouldReturnPaginatedTodos() throws Exception {
+    todoRepository.deleteAll();
+
+    todoRepository.save(new Todo("Task One"));
+    todoRepository.save(new Todo("Task Two"));
+    todoRepository.save(new Todo("Task Three"));
+
+    mockMvc.perform(get("/api/todos/page")
+            .param("page", "0")
+            .param("size", "2"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.length()").value(2))
+            .andExpect(jsonPath("$.totalElements").value(3))
+            .andExpect(jsonPath("$.totalPages").value(2));
+}
+
 }
