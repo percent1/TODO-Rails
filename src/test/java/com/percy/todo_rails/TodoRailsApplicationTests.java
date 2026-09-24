@@ -63,4 +63,13 @@ void shouldCreateTodo() throws Exception {
             .andExpect(jsonPath("$.title").value("Learn Spring Boot testing"))
             .andExpect(jsonPath("$.completed").value(false));
 }
+
+@Test
+void shouldRejectBlankTodoTitle() throws Exception {
+    mockMvc.perform(post("/api/todos")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"title\":\"\"}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.title").value("Title cannot be blank"));
+}
 }
