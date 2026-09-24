@@ -51,6 +51,11 @@ public class TodoController {
         return todoService.getTodosPaginated(pageable);
     }
 
+    @GetMapping("/query")
+    public Page<Todo> queryTodos(@RequestParam String title, @RequestParam boolean completed,Pageable pageable) {
+        return todoService.queryTodos(title, completed, pageable);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.getTodoById(id));
@@ -66,9 +71,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(
-        @PathVariable Long id,
-        @Valid @RequestBody Todo todo) {
+    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @Valid @RequestBody Todo todo) {
         return ResponseEntity.ok(todoService.updateTodo(id, todo));
     }
 

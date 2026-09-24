@@ -202,4 +202,27 @@ void shouldReturnPaginatedTodos() throws Exception {
             .andExpect(jsonPath("$.totalPages").value(2));
 }
 
+@Test
+void shouldQueryTodosByTitleAndCompletionStatus() throws Exception {
+    todoRepository.deleteAll();
+
+    Todo completed = new Todo("Learn Spring Boot");
+    completed.setCompleted(true);
+
+    Todo incomplete = new Todo("Learn Spring Boot Testing");
+
+    todoRepository.save(completed);
+    todoRepository.save(incomplete);
+
+    mockMvc.perform(get("/api/todos/query")
+            .param("title", "Spring Boot")
+            .param("completed", "true")
+            .param("page", "0")
+            .param("size", "10"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.length()").value(1))
+            .andExpect(jsonPath("$.content[0].title").value("Learn Spring Boot"))
+            .andExpect(jsonPath("$.totalElements").value(1));
+}
+
 }

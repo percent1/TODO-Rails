@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import com.percy.todo_rails.exception.TodoNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -66,5 +67,13 @@ public class TodoService {
 
     public List<Todo> getTodosSortedDescending() {
         return todoRepository.findAllByOrderByTitleDesc();
+    }
+
+    public Page<Todo> queryTodos(String title, boolean completed, Pageable pageable) {
+        return todoRepository.findByTitleContainingIgnoreCaseAndCompleted(
+            title,
+            completed,
+            pageable
+        );
     }
 }
