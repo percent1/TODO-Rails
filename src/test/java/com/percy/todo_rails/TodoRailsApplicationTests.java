@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import org.junit.jupiter.api.Test;
 
@@ -51,4 +53,14 @@ class TodoRailsApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Test GET endpoint")));
     }
+
+	@Test
+void shouldCreateTodo() throws Exception {
+    mockMvc.perform(post("/api/todos")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"title\":\"Learn Spring Boot testing\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value("Learn Spring Boot testing"))
+            .andExpect(jsonPath("$.completed").value(false));
+}
 }
