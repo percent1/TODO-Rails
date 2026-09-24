@@ -29,6 +29,11 @@ public class TodoController {
         return todoService.searchTodos(title);
     }
 
+    @GetMapping("/completed")
+    public List<Todo> getTodosByCompletionStatus(@RequestParam boolean completed) {
+        return todoService.getTodosByCompletionStatus(completed);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.getTodoById(id));

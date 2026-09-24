@@ -50,4 +50,8 @@ public List<Todo> searchTodos(String title) {
     return todoRepository.findByTitleContainingIgnoreCase(title);
 }
 
+public List<Todo> getTodosByCompletionStatus(boolean completed) {
+    return todoRepository.findByCompleted(completed);
+}
+
 }

@@ -144,4 +144,19 @@ void shouldSearchTodosByTitle() throws Exception {
                     org.hamcrest.Matchers.hasItem("Learn Spring Boot")));
 }
 
+@Test
+void shouldFilterTodosByCompletionStatus() throws Exception {
+    Todo completedTodo = new Todo("Completed task");
+    completedTodo.setCompleted(true);
+
+    todoRepository.save(completedTodo);
+    todoRepository.save(new Todo("Incomplete task"));
+
+    mockMvc.perform(get("/api/todos/completed")
+            .param("completed", "true"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[*].title").value(
+                    org.hamcrest.Matchers.hasItem("Completed task")));
+}
+
 }
