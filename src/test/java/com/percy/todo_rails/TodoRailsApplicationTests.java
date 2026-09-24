@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import org.junit.jupiter.api.Test;
 
@@ -72,4 +74,52 @@ void shouldRejectBlankTodoTitle() throws Exception {
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.title").value("Title cannot be blank"));
 }
+
+@Test
+void shouldUpdateTodo() throws Exception {
+    Todo todo = todoRepository.save(new Todo("Original title"));
+
+    mockMvc.perform(put("/api/todos/" + todo.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"title\":\"Updated title\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.title").value("Updated title"))
+            .andExpect(jsonPath("$.completed").value(false));
+}
+
+@Test
+void shouldRejectBlankTitleWhenUpdatingTodo() throws Exception {
+    Todo todo = todoRepository.save(new Todo("Original title"));
+
+    mockMvc.perform(put("/api/todos/" + todo.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"title\":\"\"}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.title").value("Title cannot be blank"));
+}
+
+@Test
+void shouldReturn404WhenTodoDoesNotExist() throws Exception {
+    mockMvc.perform(get("/api/todos/999999"))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Todo not found with id: 999999"));
+}
+
+@Test
+void shouldDeleteTodo() throws Exception {
+    Todo todo = todoRepository.save(new Todo("Todo to delete"));
+
+    mockMvc.perform(delete("/api/todos/" + todo.getId()))
+            .andExpect(status().isNoContent());
+
+    assertFalse(todoRepository.existsById(todo.getId()));
+}
+
+@Test
+void shouldReturn404WhenDeletingTodoDoesNotExist() throws Exception {
+    mockMvc.perform(delete("/api/todos/999999"))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Todo not found with id: 999999"));
+}
+
 }
