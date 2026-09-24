@@ -56,12 +56,13 @@ class TodoRailsApplicationTests {
                 .andExpect(content().string(containsString("Test GET endpoint")));
     }
 
-	@Test
+
+@Test
 void shouldCreateTodo() throws Exception {
     mockMvc.perform(post("/api/todos")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"title\":\"Learn Spring Boot testing\"}"))
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andExpect(jsonPath("$.title").value("Learn Spring Boot testing"))
             .andExpect(jsonPath("$.completed").value(false));
 }

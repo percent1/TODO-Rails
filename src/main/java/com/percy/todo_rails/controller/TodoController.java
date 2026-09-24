@@ -30,7 +30,11 @@ public class TodoController {
 
     @PostMapping
 public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo) {
-    return ResponseEntity.ok(todoService.createTodo(todo));
+    Todo createdTodo = todoService.createTodo(todo);
+
+    return ResponseEntity
+            .status(201)
+            .body(createdTodo);
 }
 
   @PutMapping("/{id}")
