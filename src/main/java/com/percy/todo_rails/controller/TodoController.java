@@ -5,6 +5,7 @@ import com.percy.todo_rails.service.TodoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,30 +24,37 @@ public class TodoController {
         return todoService.getAllTodos();
     }
 
+    @GetMapping("/search")
+    public List<Todo> searchTodos(@RequestParam String title) {
+        return todoService.searchTodos(title);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.getTodoById(id));
     }
 
     @PostMapping
-public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo) {
-    Todo createdTodo = todoService.createTodo(todo);
+    public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo) {
+        Todo createdTodo = todoService.createTodo(todo);
 
-    return ResponseEntity
+        return ResponseEntity
             .status(201)
             .body(createdTodo);
-}
+    }
 
-  @PutMapping("/{id}")
-public ResponseEntity<Todo> updateTodo(
+    @PutMapping("/{id}")
+    public ResponseEntity<Todo> updateTodo(
         @PathVariable Long id,
         @Valid @RequestBody Todo todo) {
-    return ResponseEntity.ok(todoService.updateTodo(id, todo));
-}
+        return ResponseEntity.ok(todoService.updateTodo(id, todo));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         todoService.deleteTodo(id);
         return ResponseEntity.noContent().build();
     }
+
+  
 }

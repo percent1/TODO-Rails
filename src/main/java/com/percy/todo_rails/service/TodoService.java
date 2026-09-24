@@ -45,4 +45,9 @@ public class TodoService {
 
     todoRepository.deleteById(id);
 }
+
+public List<Todo> searchTodos(String title) {
+    return todoRepository.findByTitleContainingIgnoreCase(title);
+}
+
 }

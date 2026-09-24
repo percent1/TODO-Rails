@@ -123,4 +123,25 @@ void shouldReturn404WhenDeletingTodoDoesNotExist() throws Exception {
             .andExpect(content().string("Todo not found with id: 999999"));
 }
 
+@Test
+void shouldReturn404WhenUpdatingTodoDoesNotExist() throws Exception {
+    mockMvc.perform(put("/api/todos/999999")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"title\":\"Updated title\"}"))
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("Todo not found with id: 999999"));
+}
+
+@Test
+void shouldSearchTodosByTitle() throws Exception {
+    todoRepository.save(new Todo("Learn Spring Boot"));
+    todoRepository.save(new Todo("Learn Java"));
+
+    mockMvc.perform(get("/api/todos/search")
+            .param("title", "spring"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[*].title").value(
+                    org.hamcrest.Matchers.hasItem("Learn Spring Boot")));
+}
+
 }
