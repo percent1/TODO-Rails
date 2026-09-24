@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class TodoService {
@@ -75,5 +77,18 @@ public class TodoService {
             completed,
             pageable
         );
+    }
+
+    public Map<String, Long> getTodoStats() {
+        long completed = todoRepository.countByCompletedTrue();
+        long incomplete = todoRepository.countByCompletedFalse();
+
+        Map<String, Long> stats = new HashMap<>();
+
+        stats.put("total", completed + incomplete);
+        stats.put("completed", completed);
+        stats.put("incomplete", incomplete);
+
+        return stats;
     }
 }

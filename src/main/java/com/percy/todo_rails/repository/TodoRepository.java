@@ -11,9 +11,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findByCompleted(boolean completed);
     List<Todo> findAllByOrderByTitleAsc();
     List<Todo> findAllByOrderByTitleDesc();
-    Page<Todo> findByTitleContainingIgnoreCaseAndCompleted(
-        String title,
-        boolean completed,
-        Pageable pageable
-    );
+    Page<Todo> findByTitleContainingIgnoreCaseAndCompleted(String title, boolean completed, Pageable pageable);
+    long countByCompletedTrue();
+    long countByCompletedFalse();
 }

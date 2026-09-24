@@ -225,4 +225,21 @@ void shouldQueryTodosByTitleAndCompletionStatus() throws Exception {
             .andExpect(jsonPath("$.totalElements").value(1));
 }
 
+@Test
+void shouldReturnTodoStats() throws Exception {
+    todoRepository.deleteAll();
+
+    Todo completedTodo = new Todo("Completed task");
+    completedTodo.setCompleted(true);
+
+    todoRepository.save(completedTodo);
+    todoRepository.save(new Todo("Incomplete task"));
+
+    mockMvc.perform(get("/api/todos/stats"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(2))
+            .andExpect(jsonPath("$.completed").value(1))
+            .andExpect(jsonPath("$.incomplete").value(1));
+}
+
 }
