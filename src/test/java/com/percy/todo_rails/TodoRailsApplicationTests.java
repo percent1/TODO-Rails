@@ -159,4 +159,30 @@ void shouldFilterTodosByCompletionStatus() throws Exception {
                     org.hamcrest.Matchers.hasItem("Completed task")));
 }
 
+@Test
+void shouldSortTodosByTitleAscending() throws Exception {
+    todoRepository.deleteAll();
+
+    todoRepository.save(new Todo("Zoo"));
+    todoRepository.save(new Todo("Apple"));
+
+    mockMvc.perform(get("/api/todos/sort/asc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].title").value("Apple"))
+            .andExpect(jsonPath("$[1].title").value("Zoo"));
+}
+
+@Test
+void shouldSortTodosByTitleDescending() throws Exception {
+    todoRepository.deleteAll();
+
+    todoRepository.save(new Todo("Apple"));
+    todoRepository.save(new Todo("Zoo"));
+
+    mockMvc.perform(get("/api/todos/sort/desc"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].title").value("Zoo"))
+            .andExpect(jsonPath("$[1].title").value("Apple"));
+}
+
 }

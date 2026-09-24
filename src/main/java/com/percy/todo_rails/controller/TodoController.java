@@ -34,6 +34,16 @@ public class TodoController {
         return todoService.getTodosByCompletionStatus(completed);
     }
 
+    @GetMapping("/sort/asc")
+    public List<Todo> getTodosSortedAscending() {
+        return todoService.getTodosSortedAscending();
+    }
+
+    @GetMapping("/sort/desc")
+    public List<Todo> getTodosSortedDescending() {
+        return todoService.getTodosSortedDescending();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
         return ResponseEntity.ok(todoService.getTodoById(id));

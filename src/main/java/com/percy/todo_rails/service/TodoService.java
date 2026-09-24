@@ -39,19 +39,26 @@ public class TodoService {
     }
 
     public void deleteTodo(Long id) {
-    if (!todoRepository.existsById(id)) {
-        throw new TodoNotFoundException("Todo not found with id: " + id);
+        if (!todoRepository.existsById(id)) {
+            throw new TodoNotFoundException("Todo not found with id: " + id);
+        }
+
+        todoRepository.deleteById(id);
     }
 
-    todoRepository.deleteById(id);
-}
+    public List<Todo> searchTodos(String title) {
+        return todoRepository.findByTitleContainingIgnoreCase(title);
+    }
 
-public List<Todo> searchTodos(String title) {
-    return todoRepository.findByTitleContainingIgnoreCase(title);
-}
+    public List<Todo> getTodosByCompletionStatus(boolean completed) {
+        return todoRepository.findByCompleted(completed);
+    }
 
-public List<Todo> getTodosByCompletionStatus(boolean completed) {
-    return todoRepository.findByCompleted(completed);
-}
+    public List<Todo> getTodosSortedAscending() {
+        return todoRepository.findAllByOrderByTitleAsc();
+    }
 
+    public List<Todo> getTodosSortedDescending() {
+        return todoRepository.findAllByOrderByTitleDesc();
+    }
 }
