@@ -4,6 +4,7 @@ import com.percy.todo_rails.model.Todo;
 import com.percy.todo_rails.service.TodoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -28,17 +29,16 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
-        return ResponseEntity.ok(todoService.createTodo(todo));
-    }
+public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo) {
+    return ResponseEntity.ok(todoService.createTodo(todo));
+}
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(
-            @PathVariable Long id,
-            @RequestBody Todo todo) {
-
-        return ResponseEntity.ok(todoService.updateTodo(id, todo));
-    }
+  @PutMapping("/{id}")
+public ResponseEntity<Todo> updateTodo(
+        @PathVariable Long id,
+        @Valid @RequestBody Todo todo) {
+    return ResponseEntity.ok(todoService.updateTodo(id, todo));
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
